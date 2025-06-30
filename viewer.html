@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Viewer Timer</title>
+  <style>
+    body { font-family: sans-serif; text-align: center; padding: 30px; }
+    .tim { margin: 15px; padding: 15px; border: 2px solid #333; border-radius: 10px; }
+  </style>
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyBfoTr1sT2ZFahWti_Y_i7sHMlQIWNbmhk",
+      authDomain: "timerempattim.firebaseapp.com",
+      databaseURL: "https://timerempattim-default-rtdb.firebaseio.com",
+      projectId: "timerempattim",
+      storageBucket: "timerempattim.firebasestorage.app",
+      messagingSenderId: "505622762654",
+      appId: "1:505622762654:web:1c8960504035f67c6d978f",
+      measurementId: "G-ZN3FE7WD39"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
+
+    function formatWaktu(detik) {
+      let jam = Math.floor(detik / 3600);
+      let menit = Math.floor((detik % 3600) / 60);
+      let sisaDetik = detik % 60;
+      return \`\${jam.toString().padStart(2, '0')}:\${menit.toString().padStart(2, '0')}:\${sisaDetik.toString().padStart(2, '0')}\`;
+    }
+
+    window.onload = () => {
+      db.ref("timers").on("value", snapshot => {
+        const data = snapshot.val() || [0, 0, 0, 0, 0];
+        for (let i = 1; i <= 4; i++) {
+          document.getElementById("timer" + i).innerText = formatWaktu(data[i]);
+        }
+      });
+    }
+  </script>
+</head>
+<body>
+  <h1>Live Timer Viewer</h1>
+  <div id="tim1" class="tim"><h2>Tim 1</h2><div id="timer1">00:00:00</div></div>
+  <div id="tim2" class="tim"><h2>Tim 2</h2><div id="timer2">00:00:00</div></div>
+  <div id="tim3" class="tim"><h2>Tim 3</h2><div id="timer3">00:00:00</div></div>
+  <div id="tim4" class="tim"><h2>Tim 4</h2><div id="timer4">00:00:00</div></div>
+</body>
+</html>
