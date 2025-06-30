@@ -27,7 +27,9 @@
       let jam = Math.floor(detik / 3600);
       let menit = Math.floor((detik % 3600) / 60);
       let sisaDetik = detik % 60;
-      return \`\${jam.toString().padStart(2, '0')}:\${menit.toString().padStart(2, '0')}:\${sisaDetik.toString().padStart(2, '0')}\`;
+      return jam.toString().padStart(2, '0') + ":" +
+         menit.toString().padStart(2, '0') + ":" +
+         sisaDetik.toString().padStart(2, '0');
     }
 
     window.onload = () => {
