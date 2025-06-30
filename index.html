@@ -2,125 +2,49 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8">
-  <title>Timer 4 Tim</title>
+  <title>Viewer Timer</title>
   <style>
-    body {
-      font-family: sans-serif;
-      text-align: center;
-      padding: 30px;
-    }
-    .tim {
-      margin: 15px;
-      padding: 15px;
-      border: 2px solid #333;
-      border-radius: 10px;
-    }
-    .aktif {
-      background-color: #ffd1d1; /* Merah muda saat aktif */
-    }
-    button {
-      margin: 5px;
-      padding: 10px 15px;
-      font-size: 16px;
-    }
+    body { font-family: sans-serif; text-align: center; padding: 30px; }
+    .tim { margin: 15px; padding: 15px; border: 2px solid #333; border-radius: 10px; }
   </style>
-</head>
-<body>
-  <h1>Timer 4 Tim</h1>
-
-  <div id="tim1" class="tim">
-    <h2>Tim 1</h2>
-    <div id="timer1">00:00:00</div>
-  </div>
-
-  <div id="tim2" class="tim">
-    <h2>Tim 2</h2>
-    <div id="timer2">00:00:00</div>
-  </div>
-
-  <div id="tim3" class="tim">
-    <h2>Tim 3</h2>
-    <div id="timer3">00:00:00</div>
-  </div>
-
-  <div id="tim4" class="tim">
-    <h2>Tim 4</h2>
-    <div id="timer4">00:00:00</div>
-  </div>
-
-  <br>
-  <button onclick="switchToTim(1)">Ganti ke Tim 1</button>
-  <button onclick="switchToTim(2)">Ganti ke Tim 2</button>
-  <button onclick="switchToTim(3)">Ganti ke Tim 3</button>
-  <button onclick="switchToTim(4)">Ganti ke Tim 4</button>
-  <br><br>
-  <button id="toggleBtn" onclick="togglePlayPause()">⏸️ Pause</button>
-  <button onclick="resetAll()">Reset Semua</button>
-
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
   <script>
-    let waktu = [0, 0, 0, 0, 0]; // index 0 tidak dipakai
-    let aktif = 0;
-    let interval = null;
-    let isPaused = false;
+    const firebaseConfig = {
+      apiKey: "AIzaSyBfoTr1sT2ZFahWti_Y_i7sHMlQIWNbmhk",
+      authDomain: "timerempattim.firebaseapp.com",
+      databaseURL: "https://timerempattim-default-rtdb.firebaseio.com",
+      projectId: "timerempattim",
+      storageBucket: "timerempattim.firebasestorage.app",
+      messagingSenderId: "505622762654",
+      appId: "1:505622762654:web:1c8960504035f67c6d978f",
+      measurementId: "G-ZN3FE7WD39"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
 
     function formatWaktu(detik) {
       let jam = Math.floor(detik / 3600);
       let menit = Math.floor((detik % 3600) / 60);
       let sisaDetik = detik % 60;
-      return `${jam.toString().padStart(2, '0')}:${menit.toString().padStart(2, '0')}:${sisaDetik.toString().padStart(2, '0')}`;
+      return \`\${jam.toString().padStart(2, '0')}:\${menit.toString().padStart(2, '0')}:\${sisaDetik.toString().padStart(2, '0')}\`;
     }
 
-    function updateTimer() {
-      if (aktif > 0 && !isPaused) {
-        waktu[aktif]++;
-        document.getElementById("timer" + aktif).innerText = formatWaktu(waktu[aktif]);
-      }
-    }
-
-    function switchToTim(nomorTim) {
-      clearInterval(interval);
-      aktif = nomorTim;
-      isPaused = false;
-      document.getElementById("toggleBtn").innerText = "⏸️ Pause";
-
-      for (let i = 1; i <= 4; i++) {
-        document.getElementById("tim" + i).classList.remove("aktif");
-      }
-
-      document.getElementById("tim" + aktif).classList.add("aktif");
-
-      interval = setInterval(updateTimer, 1000);
-    }
-
-    function togglePlayPause() {
-      if (aktif === 0) {
-        alert("Pilih tim terlebih dahulu.");
-        return;
-      }
-
-      if (isPaused) {
-        isPaused = false;
-        interval = setInterval(updateTimer, 1000);
-        document.getElementById("toggleBtn").innerText = "⏸️ Pause";
-      } else {
-        isPaused = true;
-        clearInterval(interval);
-        document.getElementById("toggleBtn").innerText = "▶️ Lanjut";
-      }
-    }
-
-    function resetAll() {
-      clearInterval(interval);
-      aktif = 0;
-      isPaused = false;
-      document.getElementById("toggleBtn").innerText = "⏸️ Pause";
-
-      for (let i = 1; i <= 4; i++) {
-        waktu[i] = 0;
-        document.getElementById("timer" + i).innerText = "00:00:00";
-        document.getElementById("tim" + i).classList.remove("aktif");
-      }
+    window.onload = () => {
+      db.ref("timers").on("value", snapshot => {
+        const data = snapshot.val() || [0, 0, 0, 0, 0];
+        for (let i = 1; i <= 4; i++) {
+          document.getElementById("timer" + i).innerText = formatWaktu(data[i]);
+        }
+      });
     }
   </script>
+</head>
+<body>
+  <h1>Live Timer Viewer</h1>
+  <div id="tim1" class="tim"><h2>Tim 1</h2><div id="timer1">00:00:00</div></div>
+  <div id="tim2" class="tim"><h2>Tim 2</h2><div id="timer2">00:00:00</div></div>
+  <div id="tim3" class="tim"><h2>Tim 3</h2><div id="timer3">00:00:00</div></div>
+  <div id="tim4" class="tim"><h2>Tim 4</h2><div id="timer4">00:00:00</div></div>
 </body>
 </html>
