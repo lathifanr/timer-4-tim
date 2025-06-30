@@ -11,7 +11,21 @@
   </style>
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
-  <script>
+</head>
+<body>
+  <h1>Timer Admin</h1>
+  <div id="tim1" class="tim"><h2>Tim 1</h2><div id="timer1">00:00:00</div></div>
+  <div id="tim2" class="tim"><h2>Tim 2</h2><div id="timer2">00:00:00</div></div>
+  <div id="tim3" class="tim"><h2>Tim 3</h2><div id="timer3">00:00:00</div></div>
+  <div id="tim4" class="tim"><h2>Tim 4</h2><div id="timer4">00:00:00</div></div>
+  <br>
+  <button onclick="switchToTim(1)">Ganti ke Tim 1</button>
+  <button onclick="switchToTim(2)">Ganti ke Tim 2</button>
+  <button onclick="switchToTim(3)">Ganti ke Tim 3</button>
+  <button onclick="switchToTim(4)">Ganti ke Tim 4</button><br><br>
+  <button id="toggleBtn" onclick="togglePlayPause()">⏸️ Pause</button>
+  <button onclick="resetAll()">Reset Semua</button>
+    <script>
     const firebaseConfig = {
       apiKey: "AIzaSyBfoTr1sT2ZFahWti_Y_i7sHMlQIWNbmhk",
       authDomain: "timerempattim.firebaseapp.com",
@@ -88,19 +102,5 @@
       db.ref("timers").set([0, 0, 0, 0, 0]);
     }
   </script>
-</head>
-<body>
-  <h1>Timer Admin</h1>
-  <div id="tim1" class="tim"><h2>Tim 1</h2><div id="timer1">00:00:00</div></div>
-  <div id="tim2" class="tim"><h2>Tim 2</h2><div id="timer2">00:00:00</div></div>
-  <div id="tim3" class="tim"><h2>Tim 3</h2><div id="timer3">00:00:00</div></div>
-  <div id="tim4" class="tim"><h2>Tim 4</h2><div id="timer4">00:00:00</div></div>
-  <br>
-  <button onclick="switchToTim(1)">Ganti ke Tim 1</button>
-  <button onclick="switchToTim(2)">Ganti ke Tim 2</button>
-  <button onclick="switchToTim(3)">Ganti ke Tim 3</button>
-  <button onclick="switchToTim(4)">Ganti ke Tim 4</button><br><br>
-  <button id="toggleBtn" onclick="togglePlayPause()">⏸️ Pause</button>
-  <button onclick="resetAll()">Reset Semua</button>
 </body>
 </html>
